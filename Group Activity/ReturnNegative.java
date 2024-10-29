@@ -8,7 +8,6 @@ public class ReturnNegative {
         System.out.print("Negative number: " + returnNegative(number));
     }
     public static int returnNegative(int number) {
-        int negativeNumber = number < 0 ? number : number * -1;
-        return negativeNumber;
+        return number < 0 ? number : number * -1;
     }
 }
