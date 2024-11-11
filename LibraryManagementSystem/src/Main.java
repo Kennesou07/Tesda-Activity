@@ -4,6 +4,59 @@ public class Main {
     public static void main(String[] args) {
         Library library = new Library();
         Scanner scanner = new Scanner(System.in);
+        UserDataObjectAccess userDao = new UserDataOAImplement();
+        User loggedInUser = null;
+
+        // User authentication loop
+        while (loggedInUser == null) {
+            System.out.println("Choose an option:");
+            System.out.println("1. Sign Up");
+            System.out.println("2. Login");
+            System.out.println("3. Exit");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter Username: ");
+                    String username = scanner.nextLine().trim();
+                    System.out.print("Enter Password: ");
+                    String password = scanner.nextLine().trim();
+                    System.out.print("Enter Role (admin/user): ");
+                    String role = scanner.nextLine().trim();
+
+                    User newUser = new User(username, password, role);
+                    try {
+                        userDao.signUp(newUser);
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+
+                case 2:
+                    System.out.print("Enter Username: ");
+                    String loginUsername = scanner.nextLine().trim();
+                    System.out.print("Enter Password: ");
+                    String loginPassword = scanner.nextLine().trim();
+
+                    loggedInUser = userDao.login(loginUsername, loginPassword);
+
+                    if (loggedInUser != null) {
+                        System.out.println("Login successful. Welcome, " + loggedInUser.getUsername() + " (Role: " + loggedInUser.getRole() + ")");
+                    } else {
+                        System.out.println("Invalid username or password.");
+                    }
+                    break;
+
+                case 3:
+                    System.out.println("Exiting system...");
+                    return;
+
+                default:
+                    System.out.println("Invalid choice. Try again.");
+            }
+        }
 
         // Sample books and members for testing
         library.addBook(new Book("Java Basics", "John Doe", "Programming",true));
